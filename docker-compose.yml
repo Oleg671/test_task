@@ -1,4 +1,5 @@
 services:
+  #само приложение
   test:
     build: ./app
     container_name: test
@@ -10,7 +11,7 @@ services:
     container_name: nginx1
     ports:
       - "8081:80"
-    environment:
+    environment: #перменные для nginx.conf
       - UPSTREAM_1=nginx2
       - UPSTREAM_2=nginx3
       - UPSTREAM_APP=test
@@ -20,7 +21,7 @@ services:
       - balance-net
     depends_on:
       - test
-    command: /bin/sh -c "envsubst '$$UPSTREAM_1 $$UPSTREAM_2 $$UPSTREAM_APP' < /nginx.conf > /etc/nginx/nginx.conf && nginx"
+    command: /bin/sh -c "envsubst '$$UPSTREAM_1 $$UPSTREAM_2 $$UPSTREAM_APP' < /nginx.conf > /etc/nginx/nginx.conf && nginx" #подстановка переменных и запуск nginx
 
   nginx2:
     image: nginx:alpine
